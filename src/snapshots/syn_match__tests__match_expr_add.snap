@@ -1,0 +1,30 @@
+---
+source: src/lib.rs
+assertion_line: 394
+expression: "snapshot_macro(r#\"\n                syn::parse_str(\"1 + 2\").unwrap(),\n                {\n                    #lhs + #rhs => (lhs.clone(), rhs.clone()),\n                    #_ => panic!(\"no match\"),\n                }\n                \"#)"
+---
+fn test() {
+    {
+        let __match_expr_value_owned = syn::parse_str("1 + 2").unwrap();
+        let __match_expr_value = &__match_expr_value_owned;
+        #[allow(unreachable_code, clippy::diverging_sub_expression)]
+        loop {
+            {
+                if let &syn::Expr::Binary(ref __match_expr_binary_0) = __match_expr_value {
+                    if __match_expr_binary_0.attrs.is_empty() {
+                        if matches!(__match_expr_binary_0.op, syn::BinOp::Add(_)) {
+                            let lhs = &*__match_expr_binary_0.left;
+                            let rhs = &*__match_expr_binary_0.right;
+                            break { (lhs.clone(), rhs.clone()) };
+                        }
+                    }
+                }
+            }
+            {
+                let _ = __match_expr_value;
+                break { panic!("no match") };
+            }
+            unreachable!("match_expr! pattern did not match any branch");
+        }
+    }
+}
